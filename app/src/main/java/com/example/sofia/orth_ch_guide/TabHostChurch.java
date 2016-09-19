@@ -86,8 +86,6 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
         hours = (TextView)findViewById(R.id.church_hours);
         hours.setText(ch.services);
 
-
-
     }
 
     @Override

@@ -15,11 +15,12 @@ public class Church implements Parcelable{
     public double latitude;
     public String address;
     public String services;
+    public String fete;
 
     public Church()
     {}
 
-    public Church(int image, String dedication, String parson, double longitude, double latitude, String address, String services) {
+    public Church(int image, String dedication, String parson, double latitude, double longitude, String address, String services, String fete) {
         this.image = image;
         this.dedication = dedication;
         this.parson = parson;
@@ -27,6 +28,7 @@ public class Church implements Parcelable{
         this.latitude = latitude;
         this.address = address;
         this.services = services;
+        this.fete = fete;
     }
 
 
@@ -36,8 +38,9 @@ public class Church implements Parcelable{
         parson = in.readString();
         address = in.readString();
         services = in.readString();
-        longitude = in.readDouble();
         latitude = in.readDouble();
+        longitude = in.readDouble();
+        fete = in.readString();
 
     }
 
@@ -67,6 +70,7 @@ public class Church implements Parcelable{
         dest.writeString(services);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
+        dest.writeString(fete);
     }
 
 }

@@ -17,20 +17,15 @@ import java.util.ArrayList;
  */
 public class BialostockoGdanska extends Fragment {
 
-    Church[] bial_gd = new Church[]{
-            new Church(R.drawable.logo, "Białystok 1", "adsahf", 3.0, 1.0, "Białystok, ul. Duża 2", "Niedziela: 10.00"),
-            new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 3.0, 1.0, "Białystok, ul. Mała 1", "Niedziela: 10.30"),
-            new Church(R.drawable.logo, "Gdańsk", "plokpk", 3.0, 1.0, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00")
-    };
     ArrayList<Church> bial = new ArrayList<>();
     ListView listView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.list_of_churches_in_diocese, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
-        bial.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 3.0, 1.0, "Białystok, ul. Duża 2", "Niedziela: 10.00"));
-        bial.add(new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 3.0, 1.0, "Białystok, ul. Mała 1", "Niedziela: 10.30"));
-        bial.add( new Church(R.drawable.logo, "Gdańsk", "plokpk", 3.0, 1.0, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00"));
+        bial.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 3.0, 1.0, "Białystok, ul. Duża 2", "Niedziela: 10.00", "20.09"));
+        bial.add(new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 3.0, 1.0, "Białystok, ul. Mała 1", "Niedziela: 10.30", "25.09"));
+        bial.add( new Church(R.drawable.logo, "Gdańsk", "plokpk", 3.0, 1.0, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00", "1.10"));
         //listView.setAdapter(new AdapterForListOfChurchesByDiocese(getContext(), R.layout.diecezja, lubl));
         final Context context = getActivity().getApplicationContext();
         listView.setAdapter(new AdapterForListOfChurchesByDiocese(context, R.layout.church_on_list, bial));
