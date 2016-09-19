@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Przewodnik po cerkwiach</string>
+    <string name="menu_1">Wyświetl wszystkie</string>
+    <string name="menu_2">Pokaż najbliższe</string>
+    <string name="menu_3">Swięto obchodzą</string>
+    <string name="menu_4">Mapa</string>
+    <string name="empty_list_error_message">Nie można załadować listy cerkwi.</string>
+    <string name="niedziela">Niedziela</string>
+    <string name="dzien_powszedni">Dzień powszedni</string>
+
+</resources>
