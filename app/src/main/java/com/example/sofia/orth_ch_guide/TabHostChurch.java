@@ -1,6 +1,5 @@
 package com.example.sofia.orth_ch_guide;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,12 +8,12 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -35,7 +34,7 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tab_host_church);
+        setContentView(R.layout.church_details_tab_layout);
         tabhost = (TabHost)findViewById(R.id.tabHost);
 
         tabhost.setup();
@@ -93,5 +92,10 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         LatLng position = new LatLng(ch.latitude, ch.longitude);
         googleMap.addMarker(new MarkerOptions().position(position).title(ch.dedication));
+        CameraUpdate center=
+                CameraUpdateFactory.newLatLng(position);
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(10);
+        googleMap.moveCamera(center);
+        googleMap.animateCamera(zoom);
     }
 }

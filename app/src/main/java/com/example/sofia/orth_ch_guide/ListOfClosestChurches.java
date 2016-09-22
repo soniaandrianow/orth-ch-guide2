@@ -50,10 +50,7 @@ public class ListOfClosestChurches extends AppCompatActivity {
         Toolbar toolbar = new Toolbar(this);
         layout.addView(toolbar, 0);
         setSupportActionBar(toolbar);
-        //longT = (TextView)findViewById(R.id.locationLon);
-        //latT = (TextView) findViewById(R.id.locationLat);
         listView = (ListView)findViewById(R.id.listView);
-        //setContentView(R.layout.list_of_churches_in_diocese);
         churches.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 53.16, 23.20, "Białystok, ul. Duża 2", "Niedziela: 10.00", "20.09"));
         churches.add(new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 53.15, 23.12, "Białystok, ul. Mała 1", "Niedziela: 10.30", "25.09"));
         churches.add( new Church(R.drawable.logo, "Gdańsk", "plokpk", 54.37, 18.62, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00", "1.10"));

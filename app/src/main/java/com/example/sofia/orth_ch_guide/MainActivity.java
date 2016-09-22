@@ -43,5 +43,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapa = new Intent(getBaseContext(), MapOfAll.class);
+                startActivity(mapa);
+            }
+        });
+
     }
 }
