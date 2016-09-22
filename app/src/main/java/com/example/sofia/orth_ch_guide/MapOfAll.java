@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -38,6 +39,10 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_of_all);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapOfAll);
         mapFragment.getMapAsync(this);
 
@@ -72,12 +77,6 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
 
         getCurrentLocation();
 
-
-        /*CameraPosition camPos = new CameraPosition.Builder()
-                .target(new LatLng(lati, longi))
-                .build();
-        CameraUpdate camUpd = CameraUpdateFactory.newCameraPosition(camPos);
-        googleMap.animateCamera(camUpd);*/
     }
 
     public void getCurrentLocation()

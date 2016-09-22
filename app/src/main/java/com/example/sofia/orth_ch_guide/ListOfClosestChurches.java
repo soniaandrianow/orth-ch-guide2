@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,6 +49,7 @@ public class ListOfClosestChurches extends AppCompatActivity {
         setContentView(R.layout.list_of_churches_in_diocese);
         layout = (LinearLayout)findViewById(R.id.layoutLinear);
         Toolbar toolbar = new Toolbar(this);
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.Silver));
         layout.addView(toolbar, 0);
         setSupportActionBar(toolbar);
         listView = (ListView)findViewById(R.id.listView);

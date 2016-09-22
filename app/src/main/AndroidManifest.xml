@@ -27,6 +27,7 @@
         <activity android:name=".TabHostChurch"/>
         <activity android:name=".ListOfClosestChurches"/>
         <activity android:name=".MapOfAll"/>
+        <activity android:name=".ChurchesByFete"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

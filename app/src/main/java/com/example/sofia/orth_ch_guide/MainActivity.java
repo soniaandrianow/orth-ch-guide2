@@ -43,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent daty = new Intent(getBaseContext(), ChurchesByFete.class);
+                startActivity(daty);
+            }
+        });
+
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
