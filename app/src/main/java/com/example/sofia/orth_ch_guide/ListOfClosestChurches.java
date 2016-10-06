@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -43,6 +44,8 @@ public class ListOfClosestChurches extends AppCompatActivity {
     ArrayList<Church> selected = new ArrayList<>(NUMBER_OF_CLOSEST);
     ListView listView;
 
+    DatabaseHelper dbhelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,18 @@ public class ListOfClosestChurches extends AppCompatActivity {
         layout.addView(toolbar, 0);
         setSupportActionBar(toolbar);
         listView = (ListView)findViewById(R.id.listView);
-        churches.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 53.16, 23.20, "Białystok, ul. Duża 2", "Niedziela: 10.00", "20.09"));
+
+
+        dbhelper = new DatabaseHelper(getApplicationContext());
+
+        if(dbhelper.isEmpty())
+        {
+            dbhelper.addDefault();
+        }
+
+        churches = createList(dbhelper.print());
+
+        /*churches.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 53.16, 23.20, "Białystok, ul. Duża 2", "Niedziela: 10.00", "20.09"));
         churches.add(new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 53.15, 23.12, "Białystok, ul. Mała 1", "Niedziela: 10.30", "25.09"));
         churches.add( new Church(R.drawable.logo, "Gdańsk", "plokpk", 54.37, 18.62, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00", "1.10"));
         churches.add(new Church(R.drawable.logo, "Turkowice - monaster", "Któraś siostra", 50.4, 23.44, "Turkowice, Jedyna droga", "Niedziela: 10.00", "20.09"));
@@ -61,7 +75,7 @@ public class ListOfClosestChurches extends AppCompatActivity {
         churches.add(new Church(R.drawable.logo, "Bończa", "Proboszcz 2", 50.9, 23.42, "Bończa, ul. Długa 12, Jedyna droga", "Niedziela: 8.00", "30.09"));
         churches.add(new Church(R.drawable.logo, "Wrocław", "adsahf", 51.1, 17.0, "Wrocław, ul. Wszystkich Swiętych 1", "Niedziela: 10.00", "21.09"));
         churches.add(new Church(R.drawable.logo, "Legnica", "mnbcvh", 51.2, 16.16, "Legnica, ul. Mała 1", "Niedziela: 10.30", "10.10"));
-        churches.add( new Church(R.drawable.logo, "Jelenia Góra", "plokpk", 50.9, 15.7, "Jelenia Góra, ul. Rynek 12a", "Niedziela: 8.00", "03.05"));
+        churches.add( new Church(R.drawable.logo, "Jelenia Góra", "plokpk", 50.9, 15.7, "Jelenia Góra, ul. Rynek 12a", "Niedziela: 8.00", "03.05"));*/
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
@@ -79,6 +93,28 @@ public class ListOfClosestChurches extends AppCompatActivity {
             }
         });
 
+    }
+
+    public ArrayList createList(Cursor cursor){
+
+        ArrayList<Church>newlist = new ArrayList<>();
+
+        String dedication, parson, address, services, fete, diocese;
+        double latitude, longitude;
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
+            parson = cursor.getString(cursor.getColumnIndex("parson"));
+            address = cursor.getString(cursor.getColumnIndex("address"));
+            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
+            services = cursor.getString(cursor.getColumnIndex("services"));
+            fete = cursor.getString(cursor.getColumnIndex("fete"));
+            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
+            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, diocese));
+        }
+
+        return newlist;
     }
 
     public void selectClosest()

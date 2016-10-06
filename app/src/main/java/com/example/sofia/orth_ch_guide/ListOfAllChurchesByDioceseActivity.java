@@ -35,7 +35,7 @@ public class ListOfAllChurchesByDioceseActivity extends AppCompatActivity implem
 
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        SwipeViewsPagerForDioceses adapter = new SwipeViewsPagerForDioceses(getSupportFragmentManager(), tabLayout.getTabCount());
+        SwipeViewsPagerForDioceses adapter = new SwipeViewsPagerForDioceses(getSupportFragmentManager(), tabLayout.getTabCount(), getApplicationContext());
 
         viewPager.setAdapter(adapter);
 

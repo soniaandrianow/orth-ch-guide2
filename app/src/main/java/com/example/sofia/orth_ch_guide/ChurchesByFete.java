@@ -1,6 +1,7 @@
 package com.example.sofia.orth_ch_guide;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class ChurchesByFete extends AppCompatActivity {
     ArrayList<Church> churches = new ArrayList<>();
     ArrayList<Church> chosen = new ArrayList<>();
     String today;
+    DatabaseHelper dbhelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,16 +38,17 @@ public class ChurchesByFete extends AppCompatActivity {
         today_text = (TextView)findViewById(R.id.todaysFete);
         listView = (ListView)findViewById(R.id.listView2);
 
-        churches.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 53.16, 23.20, "Białystok, ul. Duża 2", "Niedziela: 10.00", "20.09"));
-        churches.add(new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 53.15, 23.12, "Białystok, ul. Mała 1", "Niedziela: 10.30", "25.09"));
-        churches.add( new Church(R.drawable.logo, "Gdańsk", "plokpk", 54.37, 18.62, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00", "1.10"));
-        churches.add(new Church(R.drawable.logo, "Turkowice - monaster", "Któraś siostra", 50.4, 23.44, "Turkowice, Jedyna droga", "Niedziela: 10.00", "22.09"));
-        churches.add(new Church(R.drawable.logo, "Hrubieszów", "Proboszcz 1", 50.8, 23.89, "Hrub, ul. Krótka 1", "Niedziela: 10.30", "25.10"));
-        churches.add(new Church(R.drawable.logo, "Bończa", "Proboszcz 2", 50.9, 23.42, "Bończa, ul. Długa 12, Jedyna droga", "Niedziela: 8.00", "30.09"));
-        churches.add(new Church(R.drawable.logo, "Wrocław", "adsahf", 51.1, 17.0, "Wrocław, ul. Wszystkich Swiętych 1", "Niedziela: 10.00", "21.09"));
-        churches.add(new Church(R.drawable.logo, "Legnica", "mnbcvh", 51.2, 16.16, "Legnica, ul. Mała 1", "Niedziela: 10.30", "10.10"));
-        churches.add( new Church(R.drawable.logo, "Jelenia Góra", "plokpk", 50.9, 15.7, "Jelenia Góra, ul. Rynek 12a", "Niedziela: 8.00", "03.05"));
+        dbhelper = new DatabaseHelper(getApplicationContext());
 
+        dbhelper.deleteAll();
+        dbhelper.addDefault();
+        /*if(dbhelper.isEmpty())
+        {
+            dbhelper.addDefault();
+        }*/
+
+        churches = createList(dbhelper.print());
+        //System.out.println(churches.size());
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM");
         Calendar calendar = Calendar.getInstance();
@@ -53,6 +56,7 @@ public class ChurchesByFete extends AppCompatActivity {
         today = dateFormat.format(calendar.getTime());
 
         select();
+
         if(!chosen.isEmpty()) {
             today_text.setText("Dzisiaj jest "+today+",\nświęto obchodzą: ");
             listView.setAdapter(new AdapterForListOfChurchesByDiocese(this, R.layout.church_on_list, chosen));
@@ -75,9 +79,33 @@ public class ChurchesByFete extends AppCompatActivity {
     public void select()
     {
         for (int i = 0; i < churches.size(); i++) {
+            System.out.println(churches.get(i).fete);
             if(today.equals(churches.get(i).fete)){
                 chosen.add(churches.get(i));
             }
         }
     }
+
+    public ArrayList createList(Cursor cursor){
+
+        ArrayList<Church>newlist = new ArrayList<>();
+
+        String dedication, parson, address, services, fete, diocese;
+        double latitude, longitude;
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
+            parson = cursor.getString(cursor.getColumnIndex("parson"));
+            address = cursor.getString(cursor.getColumnIndex("address"));
+            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
+            services = cursor.getString(cursor.getColumnIndex("services"));
+            fete = cursor.getString(cursor.getColumnIndex("fete"));
+            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
+            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, diocese));
+        }
+
+        return newlist;
+    }
+
 }

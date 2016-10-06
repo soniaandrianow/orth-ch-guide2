@@ -1,12 +1,15 @@
 package com.example.sofia.orth_ch_guide;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 import android.widget.ListView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -15,28 +18,82 @@ import java.util.ArrayList;
 public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
 
     int tabCount;
+    DatabaseHelper dbhelper;
+    ArrayList<Church>selected = new ArrayList<>();
 
-    public SwipeViewsPagerForDioceses(FragmentManager fragmentManager, int tabCount) {
+    public SwipeViewsPagerForDioceses(FragmentManager fragmentManager, int tabCount, Context context) {
         super(fragmentManager);
         this.tabCount = tabCount;
+        dbhelper = new DatabaseHelper(context);
     }
 
     @Override
     public Fragment getItem(int position) {
+        String input;
+        Bundle extras1;
+        Diocese diocese;
 
         switch(position) {
             case 0:
-                WroclawskoSzczecinska wr_sz = new WroclawskoSzczecinska();
-                return wr_sz;
+               input = "Wrocławsko-Szczecińska";
+                try {
+                    selected = createList(dbhelper.selectDiocese(input));
+                }catch(SQLException ex){
+                    ex.printStackTrace();
+                }
+               /* for (int i = 0; i < selected.size(); i++) {
+                    System.out.println(selected.get(i).dedication);
+                }*/
+                extras1 = new Bundle();
+                extras1.putParcelableArrayList("selected", selected);
+                diocese = new Diocese();
+                diocese.setArguments(extras1);
+                return diocese;
             case 1:
-                BialostockoGdanska bi_gd = new BialostockoGdanska();
-                return bi_gd;
+                input = "Białostocko-Gdańska";
+                try {
+                    selected = createList(dbhelper.selectDiocese(input));
+                }catch(SQLException ex){
+                    ex.printStackTrace();
+                }
+               /* for (int i = 0; i < selected.size(); i++) {
+                    System.out.println(selected.get(i).dedication);
+                }*/
+                extras1 = new Bundle();
+                extras1.putParcelableArrayList("selected", selected);
+                diocese = new Diocese();
+                diocese.setArguments(extras1);
+                return diocese;
             case 2:
-                LubelskoChelmska lu_ch = new LubelskoChelmska();
-                return lu_ch;
+                input = "Lubelsko-Chełmska";
+                try {
+                    selected = createList(dbhelper.selectDiocese(input));
+                }catch(SQLException ex){
+                    ex.printStackTrace();
+                }
+               /* for (int i = 0; i < selected.size(); i++) {
+                    System.out.println(selected.get(i).dedication);
+                }*/
+                extras1 = new Bundle();
+                extras1.putParcelableArrayList("selected", selected);
+                diocese = new Diocese();
+                diocese.setArguments(extras1);
+                return diocese;
             case 3:
-                WroclawskoSzczecinska wr_szcz = new WroclawskoSzczecinska();
-                return wr_szcz;
+                input = "Białostocko-Gdańska";
+                try {
+                    selected = createList(dbhelper.selectDiocese(input));
+                }catch(SQLException ex){
+                    ex.printStackTrace();
+                }
+               /* for (int i = 0; i < selected.size(); i++) {
+                    System.out.println(selected.get(i).dedication);
+                }*/
+                extras1 = new Bundle();
+                extras1.putParcelableArrayList("selected", selected);
+                diocese = new Diocese();
+                diocese.setArguments(extras1);
+                return diocese;
             default:
                 return null;
         }
@@ -45,5 +102,27 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return tabCount;
+    }
+
+    public ArrayList createList(Cursor cursor){
+
+        ArrayList<Church>newlist = new ArrayList<>();
+
+        String dedication, parson, address, services, fete, diocese;
+        double latitude, longitude;
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
+            parson = cursor.getString(cursor.getColumnIndex("parson"));
+            address = cursor.getString(cursor.getColumnIndex("address"));
+            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
+            services = cursor.getString(cursor.getColumnIndex("services"));
+            fete = cursor.getString(cursor.getColumnIndex("fete"));
+            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
+            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, diocese));
+        }
+
+        return newlist;
     }
 }
