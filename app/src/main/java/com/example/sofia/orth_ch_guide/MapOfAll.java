@@ -143,9 +143,10 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
     public ArrayList createList(Cursor cursor){
 
         ArrayList<Church>newlist = new ArrayList<>();
-
-        String dedication, parson, address, services, fete, diocese;
+        String dedication, parson, address, services, fete, diocese, style, short_history;
         double latitude, longitude;
+        int century;
+        boolean wooden;
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             dedication = cursor.getString(cursor.getColumnIndex("dedication"));
@@ -156,9 +157,12 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
             services = cursor.getString(cursor.getColumnIndex("services"));
             fete = cursor.getString(cursor.getColumnIndex("fete"));
             diocese = cursor.getString(cursor.getColumnIndex("diocese"));
-            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, diocese));
+            style = cursor.getString(cursor.getColumnIndex("style"));
+            short_history = cursor.getString(cursor.getColumnIndex("short_history"));
+            century = cursor.getInt(cursor.getColumnIndex("century"));
+            wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
+            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
         }
-
         return newlist;
     }
 

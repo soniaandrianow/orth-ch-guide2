@@ -17,11 +17,16 @@ public class Church implements Parcelable{
     public String services;
     public String fete;
     public String diocese;
+    public String style;
+    public int century;
+    public String short_history;
+    public boolean wooden;
+
 
     public Church()
     {}
 
-    public Church(int image, String dedication, String parson, double latitude, double longitude, String address, String services, String fete, String diocese) {
+    public Church(int image, String dedication, String parson, double latitude, double longitude, String address, String services, String fete,String style, int century, String short_history, boolean wooden, String diocese) {
         this.image = image;
         this.dedication = dedication;
         this.parson = parson;
@@ -31,6 +36,11 @@ public class Church implements Parcelable{
         this.services = services;
         this.fete = fete;
         this.diocese = diocese;
+        this.style = style;
+        this.century=century;
+        this.short_history=short_history;
+        this.wooden=wooden;
+
     }
 
 
