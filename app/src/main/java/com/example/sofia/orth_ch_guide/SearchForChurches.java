@@ -8,82 +8,60 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Switch;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
- * Created by Sofia on 22.09.2016.
+ * Created by Sofia on 27.10.2016.
  */
-public class ChurchesByFete extends AppCompatActivity {
+public class SearchForChurches extends AppCompatActivity {
 
-    TextView today_text;
-    ListView listView;
     ArrayList<Church> churches = new ArrayList<>();
     ArrayList<Church> chosen = new ArrayList<>();
-    String today;
     DatabaseHelper dbhelper;
+    EditText cent;
+    Switch wood;
+    int chosen_century;
+    boolean wooden;
+    ListView listView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.churches_fete);
+        setContentView(R.layout.search_for_churches);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        today_text = (TextView)findViewById(R.id.todaysFete);
+        dbhelper = new DatabaseHelper(getApplicationContext());
+        churches = createList(dbhelper.print());
+
+        cent = (EditText)findViewById(R.id.editText);
+        wood = (Switch)findViewById(R.id.switch1);
         listView = (ListView)findViewById(R.id.listView2);
 
-        dbhelper = new DatabaseHelper(getApplicationContext());
-
-        //dbhelper.deleteAll();
-        //dbhelper.addDefault();
-        /*if(dbhelper.isEmpty())
-        {
-            dbhelper.addDefault();
-        }*/
-
-        churches = createList(dbhelper.print());
-        //System.out.println(churches.size());
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM");
-        Calendar calendar = Calendar.getInstance();
-        //System.out.println("%%%%%%"+calendar.getTime());
-        today = dateFormat.format(calendar.getTime());
+        chosen_century = Integer.parseInt(cent.getText().toString());
+        wooden = wood.isChecked();
 
         select();
 
         if(!chosen.isEmpty()) {
-            today_text.setText("Dzisiaj jest "+today+",\nświęto obchodzą: ");
             listView.setAdapter(new AdapterForListOfChurchesByDiocese(this, R.layout.church_on_list, chosen));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getBaseContext(), TabHostChurch.class);
-                    //System.out.println("+++++"+bial.get(position).address+" // "+bial.get(position).parson+" // "+bial.get(position).services);
                     intent.putExtra("cerkiew", chosen.get(position));
                     startActivity(intent);
                 }
             });
         }
         else{
-            today_text.setText("Dzisiaj jest "+today+"\nnie ma cerkwi obchodzących święta parafialne");
+
         }
 
-
-    }
-
-    public void select()
-    {
-        for (int i = 0; i < churches.size(); i++) {
-            System.out.println(churches.get(i).fete);
-            if(today.equals(churches.get(i).fete)){
-                chosen.add(churches.get(i));
-            }
-        }
     }
 
     public ArrayList createList(Cursor cursor){
@@ -114,4 +92,18 @@ public class ChurchesByFete extends AppCompatActivity {
         return newlist;
     }
 
+    public void select(){
+        for (int i = 0; i < churches.size(); i++) {
+            if(churches.get(i).century == chosen_century){
+                chosen.add(churches.get(i));
+            }
+        }
+        if(wooden){
+            for (int i = 0; i < chosen.size(); i++) {
+                if(!chosen.get(i).wooden){
+                    chosen.remove(i);
+                }
+            }
+        }
+    }
 }

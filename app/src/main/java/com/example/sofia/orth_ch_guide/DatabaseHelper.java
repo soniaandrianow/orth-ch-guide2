@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -51,6 +53,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, 1);
         //this.db = db;
         this.db = getWritableDatabase();
+
+        if (InternetStatus.getInstance(context).isOnline()) {
+            new HttpRequestTask().execute(BASE_URL);
+        }
+
     }
 
     @Override
@@ -72,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 FIELD_DIOCESE + " text );"
         );
 
-        new HttpRequestTask().execute(BASE_URL);
+        //new HttpRequestTask().execute(BASE_URL);
 
     }
 
@@ -143,21 +150,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insertOrThrow(TABLE_CHURCHES, null, values);
     }
 
-    public void addChurch(Church church){
+    public void addChurch(Church church) {
         ContentValues values = new ContentValues();
         //church.dedication = Character.toString( church.dedication.charAt(0)).toUpperCase() +  church.dedication.substring(1);
-        values.put(FIELD_DEDICATION,  church.dedication);
-        values.put(FIELD_PARSON,  church.parson);
-        values.put(FIELD_lATITUDE,  church.latitude);
-        values.put(FIELD_LONGITUDE,  church.longitude);
-        values.put(FIELD_ADDRESS,  church.address);
-        values.put(FIELD_SERVICES,  church.services);
-        values.put(FIELD_FETE,  church.fete);
-        values.put(FIELD_DIOCESE,  church.diocese);
-        values.put(FIELD_STYLE,  church.style);
-        values.put(FIELD_CENTURY,  church.century);
+        values.put(FIELD_DEDICATION, church.dedication);
+        values.put(FIELD_PARSON, church.parson);
+        values.put(FIELD_lATITUDE, church.latitude);
+        values.put(FIELD_LONGITUDE, church.longitude);
+        values.put(FIELD_ADDRESS, church.address);
+        values.put(FIELD_SERVICES, church.services);
+        values.put(FIELD_FETE, church.fete);
+        values.put(FIELD_DIOCESE, church.diocese);
+        values.put(FIELD_STYLE, church.style);
+        values.put(FIELD_CENTURY, church.century);
         values.put(FIELD_SHORT_HISTORY, church.short_history);
-        values.put(FIELD_WOODEN,  church.wooden);
+        values.put(FIELD_WOODEN, church.wooden);
         db.insertOrThrow(TABLE_CHURCHES, null, values);
     }
 
@@ -190,11 +197,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int status;
             try {
                 status = connection.getResponseCode();
-            }catch (IOException e){
+            } catch (IOException e) {
                 status = connection.getResponseCode();
             }
 
-            System.out.println("::::::::::"+status);
+            System.out.println("::::::::::" + status);
 
             switch (status) {
                 case 200:
@@ -207,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         //messages.add(line);
                     }
                     br.close();
-                    System.out.println("\\\\\\"+sb.toString()+"\\\\\\\\");
+                    //System.out.println("\\\\\\"+sb.toString()+"\\\\\\\\");
                     return sb.toString();
             }
         } catch (MalformedURLException e) {
@@ -249,16 +256,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     JSONObject churchObject = array.getJSONObject(i);
                     Church church = new Church(R.drawable.logo, churchObject.getString("dedication"), churchObject.getString("parson"), churchObject.getDouble("latitude"), churchObject.getDouble("longitude"), churchObject.getString("address"), churchObject.getString("services"), churchObject.getString("fete"), churchObject.getJSONObject("church_style").getString("name"), churchObject.getInt("century"), churchObject.getString("short_history"), churchObject.getBoolean("wooden"), churchObject.getJSONObject("diocese_church").getString("name"));
                     addChurch(church);
-                    System.out.println("&&&&&&& dodano"+church.dedication);
+                    //System.out.println("&&&&&&& dodano"+church.dedication);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            Cursor cursor = print();
+           /* Cursor cursor = print();
             for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
                 System.out.println(cursor.getString(cursor.getColumnIndex("dedication"))+" - "+cursor.getString(cursor.getColumnIndex("diocese")));
-            }
+            }*/
         }
     }
+
 }

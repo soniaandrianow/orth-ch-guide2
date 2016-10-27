@@ -28,7 +28,7 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
 
         Cursor cursor = dbhelper.print();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            System.out.println(cursor.getString(cursor.getColumnIndex("dedication"))+" - "+cursor.getString(cursor.getColumnIndex("diocese")));
+            System.out.println("+++++ "+cursor.getString(cursor.getColumnIndex("dedication"))+" - "+cursor.getString(cursor.getColumnIndex("diocese")));
         }
     }
 
