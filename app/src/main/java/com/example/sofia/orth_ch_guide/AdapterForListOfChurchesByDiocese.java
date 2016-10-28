@@ -39,7 +39,7 @@ public class AdapterForListOfChurchesByDiocese extends ArrayAdapter<Church> {
             ImageView i = (ImageView) v.findViewById(R.id.image);
 
             t.setText(church.dedication);
-            i.setImageResource(church.image);
+            i.setImageResource(R.drawable.logo);
         }
         return v;
     }

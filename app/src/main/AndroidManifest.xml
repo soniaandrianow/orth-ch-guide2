@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".WelcomingScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,6 +32,8 @@
         <activity android:name=".ListOfClosestChurches"/>
         <activity android:name=".MapOfAll"/>
         <activity android:name=".ChurchesByFete"/>
+        <activity android:name=".SearchForChurches"/>
+        <activity android:name=".MainActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

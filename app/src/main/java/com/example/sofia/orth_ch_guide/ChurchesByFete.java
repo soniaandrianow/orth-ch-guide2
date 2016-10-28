@@ -38,14 +38,8 @@ public class ChurchesByFete extends AppCompatActivity {
         today_text = (TextView)findViewById(R.id.todaysFete);
         listView = (ListView)findViewById(R.id.listView2);
 
-        dbhelper = new DatabaseHelper(getApplicationContext());
-
-        //dbhelper.deleteAll();
-        //dbhelper.addDefault();
-        /*if(dbhelper.isEmpty())
-        {
-            dbhelper.addDefault();
-        }*/
+        dbhelper = MainActivity.dbhelper;
+        //dbhelper = new DatabaseHelper(getApplicationContext());
 
         churches = createList(dbhelper.print());
         //System.out.println(churches.size());
@@ -63,7 +57,6 @@ public class ChurchesByFete extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getBaseContext(), TabHostChurch.class);
-                    //System.out.println("+++++"+bial.get(position).address+" // "+bial.get(position).parson+" // "+bial.get(position).services);
                     intent.putExtra("cerkiew", chosen.get(position));
                     startActivity(intent);
                 }
@@ -108,7 +101,7 @@ public class ChurchesByFete extends AppCompatActivity {
             short_history = cursor.getString(cursor.getColumnIndex("short_history"));
             century = cursor.getInt(cursor.getColumnIndex("century"));
             wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
+            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
         }
 
         return newlist;

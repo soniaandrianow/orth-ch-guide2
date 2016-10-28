@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -27,40 +28,51 @@ public class SearchForChurches extends AppCompatActivity {
     int chosen_century;
     boolean wooden;
     ListView listView;
+    Button search_btn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_for_churches);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        dbhelper = new DatabaseHelper(getApplicationContext());
-        churches = createList(dbhelper.print());
-
         cent = (EditText)findViewById(R.id.editText);
         wood = (Switch)findViewById(R.id.switch1);
         listView = (ListView)findViewById(R.id.listView2);
 
-        chosen_century = Integer.parseInt(cent.getText().toString());
-        wooden = wood.isChecked();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        select();
-
-        if(!chosen.isEmpty()) {
-            listView.setAdapter(new AdapterForListOfChurchesByDiocese(this, R.layout.church_on_list, chosen));
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getBaseContext(), TabHostChurch.class);
-                    intent.putExtra("cerkiew", chosen.get(position));
-                    startActivity(intent);
+        //dbhelper = new DatabaseHelper(getApplicationContext());
+        search_btn = (Button) findViewById(R.id.button6);
+        search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("wyszukujesz");
+                chosen.clear();
+                try{
+                    chosen_century = Integer.parseInt(cent.getText().toString());
+                }catch(NumberFormatException ex){
+                    chosen_century = 0;
                 }
-            });
-        }
-        else{
+                wooden = wood.isChecked();
+                select();
+                dbhelper = MainActivity.dbhelper;
+                churches = createList(dbhelper.print());
+                if(!chosen.isEmpty()) {
+                    listView.setAdapter(new AdapterForListOfChurchesByDiocese(getApplicationContext(), R.layout.church_on_list, chosen));
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getBaseContext(), TabHostChurch.class);
+                            intent.putExtra("cerkiew", chosen.get(position));
+                            startActivity(intent);
+                        }
+                    });
+                }
+                else{
 
-        }
+                }
+
+            }
+        });
 
     }
 
@@ -86,15 +98,21 @@ public class SearchForChurches extends AppCompatActivity {
             short_history = cursor.getString(cursor.getColumnIndex("short_history"));
             century = cursor.getInt(cursor.getColumnIndex("century"));
             wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
+            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
         }
 
         return newlist;
     }
 
     public void select(){
-        for (int i = 0; i < churches.size(); i++) {
-            if(churches.get(i).century == chosen_century){
+        if(chosen_century!=0){
+            for (int i = 0; i < churches.size(); i++) {
+                if (churches.get(i).century == chosen_century) {
+                    chosen.add(churches.get(i));
+                }
+            }
+        }else{
+            for (int i = 0; i < churches.size(); i++) {
                 chosen.add(churches.get(i));
             }
         }

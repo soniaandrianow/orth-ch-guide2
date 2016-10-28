@@ -48,26 +48,10 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapOfAll);
         mapFragment.getMapAsync(this);
 
-        dbhelper = new DatabaseHelper(getApplicationContext());
-
-        if(dbhelper.isEmpty())
-        {
-            dbhelper.addDefault();
-        }
+        dbhelper = MainActivity.dbhelper;
+        //dbhelper = new DatabaseHelper(getApplicationContext());
 
         churches = createList(dbhelper.print());
-
-        /*churches.add(new Church(R.drawable.logo, "Białystok 1", "adsahf", 53.16, 23.20, "Białystok, ul. Duża 2", "Niedziela: 10.00", "20.09"));
-        churches.add(new Church(R.drawable.logo, "Białystok 2", "mnbcvh", 53.15, 23.12, "Białystok, ul. Mała 1", "Niedziela: 10.30", "25.09"));
-        churches.add( new Church(R.drawable.logo, "Gdańsk", "plokpk", 54.37, 18.62, "Gdańsk, ul. Gdanska 12a", "Niedziela: 8.00", "1.10"));
-        churches.add(new Church(R.drawable.logo, "Turkowice - monaster", "Któraś siostra", 50.4, 23.44, "Turkowice, Jedyna droga", "Niedziela: 10.00", "20.09"));
-        churches.add(new Church(R.drawable.logo, "Hrubieszów", "Proboszcz 1", 50.8, 23.89, "Hrub, ul. Krótka 1", "Niedziela: 10.30", "25.10"));
-        churches.add(new Church(R.drawable.logo, "Bończa", "Proboszcz 2", 50.9, 23.42, "Bończa, ul. Długa 12, Jedyna droga", "Niedziela: 8.00", "30.09"));
-        churches.add(new Church(R.drawable.logo, "Wrocław", "adsahf", 51.1, 17.0, "Wrocław, ul. Wszystkich Swiętych 1", "Niedziela: 10.00", "21.09"));
-        churches.add(new Church(R.drawable.logo, "Legnica", "mnbcvh", 51.2, 16.16, "Legnica, ul. Mała 1", "Niedziela: 10.30", "10.10"));
-        churches.add( new Church(R.drawable.logo, "Jelenia Góra", "plokpk", 50.9, 15.7, "Jelenia Góra, ul. Rynek 12a", "Niedziela: 8.00", "03.05"));
-*/
-
     }
 
 
@@ -99,7 +83,6 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
         } else {
             gpsLocator.showAlert();
         }
-        System.out.println("******"+longi + " // " + lati);
         googleMap.addMarker(new MarkerOptions().position(new LatLng(lati, longi)).title("Your location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         CameraUpdate center=
                 CameraUpdateFactory.newLatLng(new LatLng(lati, longi));
@@ -161,7 +144,7 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
             short_history = cursor.getString(cursor.getColumnIndex("short_history"));
             century = cursor.getInt(cursor.getColumnIndex("century"));
             wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
+            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
         }
         return newlist;
     }

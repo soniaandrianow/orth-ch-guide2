@@ -55,6 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.db = getWritableDatabase();
 
         if (InternetStatus.getInstance(context).isOnline()) {
+            deleteAll();
             new HttpRequestTask().execute(BASE_URL);
         }
 
@@ -211,10 +212,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     String line;
                     while ((line = br.readLine()) != null) {
                         sb.append(line + "\n");
-                        //messages.add(line);
                     }
                     br.close();
-                    //System.out.println("\\\\\\"+sb.toString()+"\\\\\\\\");
                     return sb.toString();
             }
         } catch (MalformedURLException e) {
@@ -229,43 +228,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private class HttpRequestTask extends AsyncTask<String, Void, String> {
 
-        private String content;
-        private String error = null;
-        String data;
-
         @Override
         protected String doInBackground(String... params) {
             String url = params[0];
-            System.out.println("++++++" + url);
+            System.out.println(url);
             return requestContent(url);
         }
 
         protected void onPostExecute(String res) {
 
             try {
-                //System.out.println("***  "+res);
                 JSONArray array = new JSONArray(res);
 
-                /*if (first || last_id != json.getInt("AvailableItems")) {
-                    last_id = json.getInt("AvailableItems");
-                    System.out.println("+++++++++++++LAST: " + last_id);
-                    first = false;
-                    count = last_id;
-                }*/
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject churchObject = array.getJSONObject(i);
-                    Church church = new Church(R.drawable.logo, churchObject.getString("dedication"), churchObject.getString("parson"), churchObject.getDouble("latitude"), churchObject.getDouble("longitude"), churchObject.getString("address"), churchObject.getString("services"), churchObject.getString("fete"), churchObject.getJSONObject("church_style").getString("name"), churchObject.getInt("century"), churchObject.getString("short_history"), churchObject.getBoolean("wooden"), churchObject.getJSONObject("diocese_church").getString("name"));
+                    Church church = new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, churchObject.getString("dedication"), churchObject.getString("parson"), churchObject.getDouble("latitude"), churchObject.getDouble("longitude"), churchObject.getString("address"), churchObject.getString("services"), churchObject.getString("fete"), churchObject.getJSONObject("church_style").getString("name"), churchObject.getInt("century"), churchObject.getString("short_history"), churchObject.getBoolean("wooden"), churchObject.getJSONObject("diocese_church").getString("name"));
                     addChurch(church);
-                    //System.out.println("&&&&&&& dodano"+church.dedication);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-           /* Cursor cursor = print();
-            for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                System.out.println(cursor.getString(cursor.getColumnIndex("dedication"))+" - "+cursor.getString(cursor.getColumnIndex("diocese")));
-            }*/
         }
     }
 

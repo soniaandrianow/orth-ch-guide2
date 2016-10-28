@@ -13,11 +13,14 @@ public class MainActivity extends AppCompatActivity {
     Button button2;
     Button button3;
     Button button4;
+    Button button5;
+    public static DatabaseHelper dbhelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbhelper = new DatabaseHelper(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
         button4 = (Button) findViewById(R.id.button4);
+        button5 = (Button) findViewById(R.id.button5);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,5 +63,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent wyszukiwanie = new Intent(getBaseContext(), SearchForChurches.class);
+                startActivity(wyszukiwanie);
+            }
+        });
     }
 }

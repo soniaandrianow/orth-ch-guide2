@@ -24,12 +24,13 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
     public SwipeViewsPagerForDioceses(FragmentManager fragmentManager, int tabCount, Context context) {
         super(fragmentManager);
         this.tabCount = tabCount;
-        dbhelper = new DatabaseHelper(context);
+        dbhelper = MainActivity.dbhelper;
+        //dbhelper = new DatabaseHelper(context);
 
         Cursor cursor = dbhelper.print();
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        /*for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             System.out.println("+++++ "+cursor.getString(cursor.getColumnIndex("dedication"))+" - "+cursor.getString(cursor.getColumnIndex("diocese")));
-        }
+        }*/
     }
 
     @Override
@@ -46,9 +47,6 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
                 }catch(SQLException ex){
                     ex.printStackTrace();
                 }
-               /* for (int i = 0; i < selected.size(); i++) {
-                    System.out.println(selected.get(i).dedication);
-                }*/
                 extras1 = new Bundle();
                 extras1.putParcelableArrayList("selected", selected);
                 diocese = new Diocese();
@@ -61,9 +59,6 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
                 }catch(SQLException ex){
                     ex.printStackTrace();
                 }
-               /* for (int i = 0; i < selected.size(); i++) {
-                    System.out.println(selected.get(i).dedication);
-                }*/
                 extras1 = new Bundle();
                 extras1.putParcelableArrayList("selected", selected);
                 diocese = new Diocese();
@@ -76,9 +71,7 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
                 }catch(SQLException ex){
                     ex.printStackTrace();
                 }
-               /* for (int i = 0; i < selected.size(); i++) {
-                    System.out.println(selected.get(i).dedication);
-                }*/
+
                 extras1 = new Bundle();
                 extras1.putParcelableArrayList("selected", selected);
                 diocese = new Diocese();
@@ -91,9 +84,7 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
                 }catch(SQLException ex){
                     ex.printStackTrace();
                 }
-               /* for (int i = 0; i < selected.size(); i++) {
-                    System.out.println(selected.get(i).dedication);
-                }*/
+
                 extras1 = new Bundle();
                 extras1.putParcelableArrayList("selected", selected);
                 diocese = new Diocese();
@@ -131,7 +122,9 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
             short_history = cursor.getString(cursor.getColumnIndex("short_history"));
             century = cursor.getInt(cursor.getColumnIndex("century"));
             wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(R.drawable.logo, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
+            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
+
+            System.out.println(short_history);
         }
 
         return newlist;

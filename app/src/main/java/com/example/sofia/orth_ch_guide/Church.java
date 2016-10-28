@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class Church implements Parcelable{
 
-    public int image;
+    public int [] image;
     public String dedication;
     public String parson;
     public double longitude;
@@ -26,7 +26,7 @@ public class Church implements Parcelable{
     public Church()
     {}
 
-    public Church(int image, String dedication, String parson, double latitude, double longitude, String address, String services, String fete,String style, int century, String short_history, boolean wooden, String diocese) {
+    public Church(int [] image, String dedication, String parson, double latitude, double longitude, String address, String services, String fete,String style, int century, String short_history, boolean wooden, String diocese) {
         this.image = image;
         this.dedication = dedication;
         this.parson = parson;
@@ -45,7 +45,7 @@ public class Church implements Parcelable{
 
 
     protected Church(Parcel in) {
-        image = in.readInt();
+        image = in.createIntArray();
         dedication = in.readString();
         parson = in.readString();
         address = in.readString();
@@ -54,6 +54,9 @@ public class Church implements Parcelable{
         longitude = in.readDouble();
         fete = in.readString();
         diocese = in.readString();
+        style = in.readString();
+        century = in.readInt();
+        short_history = in.readString();
 
     }
 
@@ -76,7 +79,7 @@ public class Church implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(image);
+        dest.writeIntArray(image);
         dest.writeString(dedication);
         dest.writeString(parson);
         dest.writeString(address);
@@ -85,6 +88,9 @@ public class Church implements Parcelable{
         dest.writeDouble(longitude);
         dest.writeString(fete);
         dest.writeString(diocese);
+        dest.writeString(style);
+        dest.writeInt(century);
+        dest.writeString(short_history);
     }
 
 }

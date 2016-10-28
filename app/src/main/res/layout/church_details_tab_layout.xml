@@ -38,11 +38,20 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/pager"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal">
+                    </android.support.v4.view.ViewPager>
+
+                   <!-- <ImageView
                         android:id="@+id/church_image"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_gravity="center_horizontal" />-->
 
                     <TextView
                         android:id="@+id/church_name"
@@ -53,6 +62,13 @@
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                     <TextView
                         android:id="@+id/church_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="New Text"
+                        android:layout_marginBottom="10dp"/>
+                    <TextView
+                        android:id="@+id/church_parson"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -79,6 +95,19 @@
                         android:layout_gravity="center_horizontal"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:gravity="center_horizontal" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/history"
+                        android:layout_gravity="center_horizontal"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:gravity="center_horizontal"/>
                 </LinearLayout>
 
             </FrameLayout>

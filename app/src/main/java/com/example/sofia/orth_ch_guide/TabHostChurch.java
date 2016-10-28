@@ -3,6 +3,7 @@ package com.example.sofia.orth_ch_guide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -26,10 +27,12 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
     ImageView image;
     TextView name;
     TextView address;
+    TextView parson;
     TextView hours;
     Intent intent;
     String position;
     Church ch;
+    TextView sh_history;
     //private GoogleMap googleMap;
 
     @Override
@@ -49,18 +52,23 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
         spec.setIndicator("Dane Kontaktowe");
         tabhost.addTab(spec);
 
-        image = (ImageView)findViewById(R.id.church_image);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+
+        //image = (ImageView)findViewById(R.id.church_image);
         name = (TextView) findViewById(R.id.church_name);
         address = (TextView) findViewById(R.id.church_address);
+        parson = (TextView) findViewById(R.id.church_parson);
 
 
 
         intent=getIntent();
         //position = intent.getStringExtra("id");
         ch = (Church) intent.getParcelableExtra("cerkiew");
-        image.setImageResource(ch.image);
+        //image.setImageResource(ch.image);
         name.setText(ch.dedication);
         address.setText(ch.address);
+        parson.setText("Proboszcz parafii: "+ch.parson);
+        viewPager.setAdapter(new CustomSwipeAdapter(this, ch));
 
         /*try{
             if(googleMap == null) {*/
@@ -77,11 +85,14 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
             e.printStackTrace();
         }*/
 
-        System.out.println(ch.dedication);
+        /*System.out.println(ch.dedication);
         System.out.println(ch.address);
         System.out.println(ch.parson);
-        System.out.println(ch.services);
-
+        System.out.println(ch.services);*/
+       /* System.out.println(ch.short_history);
+        System.out.println(ch.style);
+        System.out.println(ch.wooden);
+*/
         spec = tabhost.newTabSpec("Godziny");
         spec.setContent(R.id.linearLayout2);
         spec.setIndicator("Godziny Nabożeństw");
@@ -89,6 +100,15 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
 
         hours = (TextView)findViewById(R.id.church_hours);
         hours.setText(ch.services);
+
+        spec = tabhost.newTabSpec("Historia");
+        spec.setContent(R.id.linearLayout3);
+        spec.setIndicator("Historia cerkwi");
+        tabhost.addTab(spec);
+
+        sh_history = (TextView)findViewById(R.id.history);
+        sh_history.setText(ch.short_history);
+        System.out.println(ch.short_history);
 
     }
 
