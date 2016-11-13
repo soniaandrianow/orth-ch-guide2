@@ -32,19 +32,11 @@ import java.util.ArrayList;
  */
 public class ListOfClosestChurches extends AppCompatActivity {
 
-    ArrayList<Church> churches = new ArrayList<>();
-    double longi;
-    double lati;
-    TextView longT;
     LinearLayout layout;
-    TextView latT;
-    private final static int NUMBER_OF_CLOSEST = 1;
+    private final static int NUMBER_OF_CLOSEST = 2;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 0;
-
     ArrayList<Church> selected = new ArrayList<>(NUMBER_OF_CLOSEST);
     ListView listView;
-
-    DatabaseHelper dbhelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,20 +44,17 @@ public class ListOfClosestChurches extends AppCompatActivity {
         setContentView(R.layout.list_of_churches_in_diocese);
         layout = (LinearLayout)findViewById(R.id.layoutLinear);
         Toolbar toolbar = new Toolbar(this);
-        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.Silver));
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         layout.addView(toolbar, 0);
         setSupportActionBar(toolbar);
         listView = (ListView)findViewById(R.id.listView);
-
-
-        dbhelper = MainActivity.dbhelper;
-        churches = createList(dbhelper.print());
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }
 
-        selectClosest();
+
+        selected = new Helper().selectByDistance(NUMBER_OF_CLOSEST, this);
 
         listView.setAdapter(new AdapterForListOfChurchesByDiocese(this, R.layout.church_on_list, selected));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,62 +67,6 @@ public class ListOfClosestChurches extends AppCompatActivity {
 
     }
 
-    public ArrayList createList(Cursor cursor){
-
-        ArrayList<Church>newlist = new ArrayList<>();
-
-        String dedication, parson, address, services, fete, diocese, style, short_history;
-        double latitude, longitude;
-        int century;
-        boolean wooden;
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
-            parson = cursor.getString(cursor.getColumnIndex("parson"));
-            address = cursor.getString(cursor.getColumnIndex("address"));
-            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
-            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
-            services = cursor.getString(cursor.getColumnIndex("services"));
-            fete = cursor.getString(cursor.getColumnIndex("fete"));
-            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
-            style = cursor.getString(cursor.getColumnIndex("style"));
-            short_history = cursor.getString(cursor.getColumnIndex("short_history"));
-            century = cursor.getInt(cursor.getColumnIndex("century"));
-            wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
-        }
-
-        return newlist;
-    }
-
-    public void selectClosest()
-    {
-        ArrayList<Church> chosen = new ArrayList<>(NUMBER_OF_CLOSEST);
-        GPSLocator gpsLocator = new GPSLocator(this);
-        if(gpsLocator.canGetLocation) {
-            longi = gpsLocator.getLongitude();
-            lati = gpsLocator.getLatitude();
-        }
-        else {gpsLocator.showAlert();}
-        System.out.println(longi+" // "+lati);
-        for (int k = 0; k < NUMBER_OF_CLOSEST; k++) {
-            chosen.add(churches.get(k));
-            System.out.println(churches.get(k).dedication);
-        }
-        for (int i = 0; i < churches.size(); i++) {
-            for (int j = 0; j < NUMBER_OF_CLOSEST; j++) {
-                if(Math.abs(lati - chosen.get(j).latitude)>Math.abs(lati-churches.get(i).latitude) || Math.abs(longi - chosen.get(j).longitude)>Math.abs(longi-churches.get(i).longitude)){
-                    chosen.set(j, churches.get(i));
-                    System.out.println(chosen.get(j).dedication);
-                    System.out.println("***"+(Math.abs((lati - chosen.get(j).latitude))+"//"+Math.abs((longi - chosen.get(j).longitude))));
-                    break;
-                }
-            }
-        }
-
-        selected = chosen;
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -143,7 +76,7 @@ public class ListOfClosestChurches extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    selectClosest();
+                    selected = new Helper().selectByDistance(NUMBER_OF_CLOSEST, this);
                     listView.setAdapter(new AdapterForListOfChurchesByDiocese(this, R.layout.church_on_list, selected));
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

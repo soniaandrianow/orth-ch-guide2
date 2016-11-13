@@ -41,7 +41,6 @@ public class SearchForChurches extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //dbhelper = new DatabaseHelper(getApplicationContext());
         search_btn = (Button) findViewById(R.id.button6);
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +53,7 @@ public class SearchForChurches extends AppCompatActivity {
                     chosen_century = 0;
                 }
                 wooden = wood.isChecked();
-                select();
-                dbhelper = MainActivity.dbhelper;
-                churches = createList(dbhelper.print());
+                chosen = new Helper().search(chosen_century, wooden);
                 if(!chosen.isEmpty()) {
                     listView.setAdapter(new AdapterForListOfChurchesByDiocese(getApplicationContext(), R.layout.church_on_list, chosen));
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,52 +73,4 @@ public class SearchForChurches extends AppCompatActivity {
 
     }
 
-    public ArrayList createList(Cursor cursor){
-
-        ArrayList<Church>newlist = new ArrayList<>();
-
-        String dedication, parson, address, services, fete, diocese, style, short_history;
-        double latitude, longitude;
-        int century;
-        boolean wooden;
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
-            parson = cursor.getString(cursor.getColumnIndex("parson"));
-            address = cursor.getString(cursor.getColumnIndex("address"));
-            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
-            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
-            services = cursor.getString(cursor.getColumnIndex("services"));
-            fete = cursor.getString(cursor.getColumnIndex("fete"));
-            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
-            style = cursor.getString(cursor.getColumnIndex("style"));
-            short_history = cursor.getString(cursor.getColumnIndex("short_history"));
-            century = cursor.getInt(cursor.getColumnIndex("century"));
-            wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
-        }
-
-        return newlist;
-    }
-
-    public void select(){
-        if(chosen_century!=0){
-            for (int i = 0; i < churches.size(); i++) {
-                if (churches.get(i).century == chosen_century) {
-                    chosen.add(churches.get(i));
-                }
-            }
-        }else{
-            for (int i = 0; i < churches.size(); i++) {
-                chosen.add(churches.get(i));
-            }
-        }
-        if(wooden){
-            for (int i = 0; i < chosen.size(); i++) {
-                if(!chosen.get(i).wooden){
-                    chosen.remove(i);
-                }
-            }
-        }
-    }
 }

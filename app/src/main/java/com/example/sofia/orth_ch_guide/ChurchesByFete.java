@@ -25,7 +25,6 @@ public class ChurchesByFete extends AppCompatActivity {
     ArrayList<Church> churches = new ArrayList<>();
     ArrayList<Church> chosen = new ArrayList<>();
     String today;
-    DatabaseHelper dbhelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,18 +37,11 @@ public class ChurchesByFete extends AppCompatActivity {
         today_text = (TextView)findViewById(R.id.todaysFete);
         listView = (ListView)findViewById(R.id.listView2);
 
-        dbhelper = MainActivity.dbhelper;
-        //dbhelper = new DatabaseHelper(getApplicationContext());
-
-        churches = createList(dbhelper.print());
-        //System.out.println(churches.size());
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM");
         Calendar calendar = Calendar.getInstance();
-        //System.out.println("%%%%%%"+calendar.getTime());
         today = dateFormat.format(calendar.getTime());
 
-        select();
+        chosen = new Helper().selectByFete();
 
         if(!chosen.isEmpty()) {
             today_text.setText("Dzisiaj jest "+today+",\nświęto obchodzą: ");
@@ -65,46 +57,6 @@ public class ChurchesByFete extends AppCompatActivity {
         else{
             today_text.setText("Dzisiaj jest "+today+"\nnie ma cerkwi obchodzących święta parafialne");
         }
-
-
-    }
-
-    public void select()
-    {
-        for (int i = 0; i < churches.size(); i++) {
-            System.out.println(churches.get(i).fete);
-            if(today.equals(churches.get(i).fete)){
-                chosen.add(churches.get(i));
-            }
-        }
-    }
-
-    public ArrayList createList(Cursor cursor){
-
-        ArrayList<Church>newlist = new ArrayList<>();
-
-        String dedication, parson, address, services, fete, diocese, style, short_history;
-        double latitude, longitude;
-        int century;
-        boolean wooden;
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
-            parson = cursor.getString(cursor.getColumnIndex("parson"));
-            address = cursor.getString(cursor.getColumnIndex("address"));
-            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
-            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
-            services = cursor.getString(cursor.getColumnIndex("services"));
-            fete = cursor.getString(cursor.getColumnIndex("fete"));
-            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
-            style = cursor.getString(cursor.getColumnIndex("style"));
-            short_history = cursor.getString(cursor.getColumnIndex("short_history"));
-            century = cursor.getInt(cursor.getColumnIndex("century"));
-            wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
-        }
-
-        return newlist;
     }
 
 }

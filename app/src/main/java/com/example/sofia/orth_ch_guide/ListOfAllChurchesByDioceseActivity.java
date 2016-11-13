@@ -9,10 +9,11 @@ import android.support.v7.widget.Toolbar;
 /**
  * Created by Sofia on 13.09.2016.
  */
-public class ListOfAllChurchesByDioceseActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
+public class ListOfAllChurchesByDioceseActivity extends AppCompatActivity{//} implements TabLayout.OnTabSelectedListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    final int TAB_COUNT = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -23,39 +24,17 @@ public class ListOfAllChurchesByDioceseActivity extends AppCompatActivity implem
         setSupportActionBar(toolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Wrocławsko-Szczecińska"));
-        tabLayout.addTab(tabLayout.newTab().setText("Białostocko-Gdańska"));
-        tabLayout.addTab(tabLayout.newTab().setText("Lubelsko-Chełmska"));
-        tabLayout.addTab(tabLayout.newTab().setText("Warszawsko-Bielska"));
-        tabLayout.addTab(tabLayout.newTab().setText("Lódzko-Poznańska"));
-        tabLayout.addTab(tabLayout.newTab().setText("Przemysko-Nowosądecka"));
-        //tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
-
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        SwipeViewsPagerForDioceses adapter = new SwipeViewsPagerForDioceses(getSupportFragmentManager(), tabLayout.getTabCount(), getApplicationContext());
+        SwipeViewsPagerForDioceses adapter = new SwipeViewsPagerForDioceses(getSupportFragmentManager(), TAB_COUNT, getApplicationContext());
 
         viewPager.setAdapter(adapter);
-
-        tabLayout.addOnTabSelectedListener(this);
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        viewPager.setCurrentItem(tab.getPosition());
-        System.out.println("*******************"+tab.getPosition());
-
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setCurrentItem(3);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
 
     }
 }

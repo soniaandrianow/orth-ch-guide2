@@ -33,9 +33,7 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 0;
     public double longi;
     public double lati;
-    LatLng camPos;
     GoogleMap googleMap;
-    DatabaseHelper dbhelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,11 +45,7 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapOfAll);
         mapFragment.getMapAsync(this);
-
-        dbhelper = MainActivity.dbhelper;
-        //dbhelper = new DatabaseHelper(getApplicationContext());
-
-        churches = createList(dbhelper.print());
+        churches = new Helper().churches;
     }
 
 
@@ -122,31 +116,4 @@ public class MapOfAll extends AppCompatActivity implements OnMapReadyCallback, G
             }
         }
     }
-
-    public ArrayList createList(Cursor cursor){
-
-        ArrayList<Church>newlist = new ArrayList<>();
-        String dedication, parson, address, services, fete, diocese, style, short_history;
-        double latitude, longitude;
-        int century;
-        boolean wooden;
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
-            parson = cursor.getString(cursor.getColumnIndex("parson"));
-            address = cursor.getString(cursor.getColumnIndex("address"));
-            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
-            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
-            services = cursor.getString(cursor.getColumnIndex("services"));
-            fete = cursor.getString(cursor.getColumnIndex("fete"));
-            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
-            style = cursor.getString(cursor.getColumnIndex("style"));
-            short_history = cursor.getString(cursor.getColumnIndex("short_history"));
-            century = cursor.getInt(cursor.getColumnIndex("century"));
-            wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
-        }
-        return newlist;
-    }
-
 }

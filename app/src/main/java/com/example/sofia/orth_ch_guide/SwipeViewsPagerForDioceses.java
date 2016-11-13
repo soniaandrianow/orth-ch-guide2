@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 import android.widget.ListView;
@@ -18,115 +19,71 @@ import java.util.ArrayList;
 public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
 
     int tabCount;
-    DatabaseHelper dbhelper;
-    ArrayList<Church>selected = new ArrayList<>();
+    ArrayList<Church> selected = new ArrayList<>();
+    Helper helper;
+    String[] tabTitle = new String[]{
+            "Wrocławsko-Szczecińska",
+            "Białostocko-Gdańska",
+            "Lubelsko-Chełmska",
+            "Warszawsko-Bielska",
+            "Łódzko-Poznańska",
+            "Przemysko-Gorlicka",
+            "Ordynariat Wojska Polskiego"
+    };
 
     public SwipeViewsPagerForDioceses(FragmentManager fragmentManager, int tabCount, Context context) {
         super(fragmentManager);
         this.tabCount = tabCount;
-        dbhelper = MainActivity.dbhelper;
-        //dbhelper = new DatabaseHelper(context);
-
-        Cursor cursor = dbhelper.print();
-        /*for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            System.out.println("+++++ "+cursor.getString(cursor.getColumnIndex("dedication"))+" - "+cursor.getString(cursor.getColumnIndex("diocese")));
-        }*/
+        helper = new Helper();
     }
 
     @Override
     public Fragment getItem(int position) {
-        String input;
+        String input = "";
         Bundle extras1;
         Diocese diocese;
 
-        switch(position) {
+        switch (position) {
             case 0:
-               input = "Wrocławsko-Szczecińska";
-                try {
-                    selected = createList(dbhelper.selectDiocese(input));
-                }catch(SQLException ex){
-                    ex.printStackTrace();
-                }
-                extras1 = new Bundle();
-                extras1.putParcelableArrayList("selected", selected);
-                diocese = new Diocese();
-                diocese.setArguments(extras1);
-                return diocese;
+                input = "Wrocławsko-Szczecińska";
+                break;
             case 1:
                 input = "Białostocko-Gdańska";
-                try {
-                    selected = createList(dbhelper.selectDiocese(input));
-                }catch(SQLException ex){
-                    ex.printStackTrace();
-                }
-                extras1 = new Bundle();
-                extras1.putParcelableArrayList("selected", selected);
-                diocese = new Diocese();
-                diocese.setArguments(extras1);
-                return diocese;
+                break;
             case 2:
                 input = "Lubelsko-Chełmska";
-                try {
-                    selected = createList(dbhelper.selectDiocese(input));
-                }catch(SQLException ex){
-                    ex.printStackTrace();
-                }
-
-                extras1 = new Bundle();
-                extras1.putParcelableArrayList("selected", selected);
-                diocese = new Diocese();
-                diocese.setArguments(extras1);
-                return diocese;
+                break;
             case 3:
-                input = "Białostocko-Gdańska";
-                try {
-                    selected = createList(dbhelper.selectDiocese(input));
-                }catch(SQLException ex){
-                    ex.printStackTrace();
-                }
-
-                extras1 = new Bundle();
-                extras1.putParcelableArrayList("selected", selected);
-                diocese = new Diocese();
-                diocese.setArguments(extras1);
-                return diocese;
-            default:
-                return null;
+                input = "Warszawsko-Bielska";
+                break;
+            case 4:
+                input = "Łódzko-Poznańska";
+                break;
+            case 5:
+                input = "Przemysko-Gorlicka";
+                break;
+            case 6:
+                input = "Ordynariat Wojska Polskiego";
+                break;
         }
+        selected.clear();
+        selected = helper.selectByDiocese(input);
+        extras1 = new Bundle();
+        extras1.putParcelableArrayList("selected", selected);
+        diocese = new Diocese();
+        diocese.setArguments(extras1);
+        return diocese;
     }
+
 
     @Override
     public int getCount() {
         return tabCount;
     }
 
-    public ArrayList createList(Cursor cursor){
-
-        ArrayList<Church>newlist = new ArrayList<>();
-
-        String dedication, parson, address, services, fete, diocese, style, short_history;
-        double latitude, longitude;
-        int century;
-        boolean wooden;
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            dedication = cursor.getString(cursor.getColumnIndex("dedication"));
-            parson = cursor.getString(cursor.getColumnIndex("parson"));
-            address = cursor.getString(cursor.getColumnIndex("address"));
-            latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
-            longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
-            services = cursor.getString(cursor.getColumnIndex("services"));
-            fete = cursor.getString(cursor.getColumnIndex("fete"));
-            diocese = cursor.getString(cursor.getColumnIndex("diocese"));
-            style = cursor.getString(cursor.getColumnIndex("style"));
-            short_history = cursor.getString(cursor.getColumnIndex("short_history"));
-            century = cursor.getInt(cursor.getColumnIndex("century"));
-            wooden = cursor.getInt(cursor.getColumnIndex("wooden"))>0;
-            newlist.add(new Church(new int[]{R.drawable.ch1, R.drawable.ch2, R.drawable.ch3}, dedication, parson, latitude, longitude, address, services, fete, style, century, short_history, wooden, diocese));
-
-            System.out.println(short_history);
-        }
-
-        return newlist;
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabTitle[position];
     }
+
 }

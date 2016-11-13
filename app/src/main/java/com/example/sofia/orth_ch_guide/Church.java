@@ -3,12 +3,14 @@ package com.example.sofia.orth_ch_guide;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by Sofia on 13.09.2016.
  */
 public class Church implements Parcelable{
 
-    public int [] image;
+    String photos;
     public String dedication;
     public String parson;
     public double longitude;
@@ -26,8 +28,7 @@ public class Church implements Parcelable{
     public Church()
     {}
 
-    public Church(int [] image, String dedication, String parson, double latitude, double longitude, String address, String services, String fete,String style, int century, String short_history, boolean wooden, String diocese) {
-        this.image = image;
+    public Church(String dedication, String parson, double latitude, double longitude, String address, String services, String fete,String style, int century, String short_history, boolean wooden, String diocese, String photos) {
         this.dedication = dedication;
         this.parson = parson;
         this.longitude = longitude;
@@ -40,12 +41,12 @@ public class Church implements Parcelable{
         this.century=century;
         this.short_history=short_history;
         this.wooden=wooden;
+        this.photos = photos;
 
     }
 
 
     protected Church(Parcel in) {
-        image = in.createIntArray();
         dedication = in.readString();
         parson = in.readString();
         address = in.readString();
@@ -57,6 +58,7 @@ public class Church implements Parcelable{
         style = in.readString();
         century = in.readInt();
         short_history = in.readString();
+        photos = in.readString();
 
     }
 
@@ -79,7 +81,6 @@ public class Church implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeIntArray(image);
         dest.writeString(dedication);
         dest.writeString(parson);
         dest.writeString(address);
@@ -91,6 +92,7 @@ public class Church implements Parcelable{
         dest.writeString(style);
         dest.writeInt(century);
         dest.writeString(short_history);
+        dest.writeString(photos);
     }
 
 }

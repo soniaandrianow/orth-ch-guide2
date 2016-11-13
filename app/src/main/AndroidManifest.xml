@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sofia.orth_ch_guide">
+    <uses-sdk android:minSdkVersion="21"/>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -35,9 +36,11 @@
         <activity android:name=".SearchForChurches"/>
         <activity android:name=".MainActivity"/>
 
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDDOgtGaPqDhhpZfmUNLnt3waRFPUKTM0A"/>
+
 
     </application>
 

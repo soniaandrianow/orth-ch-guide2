@@ -24,7 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallback{
 
     TabHost tabhost;
-    ImageView image;
     TextView name;
     TextView address;
     TextView parson;
@@ -33,7 +32,6 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
     String position;
     Church ch;
     TextView sh_history;
-    //private GoogleMap googleMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +52,6 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
-        //image = (ImageView)findViewById(R.id.church_image);
         name = (TextView) findViewById(R.id.church_name);
         address = (TextView) findViewById(R.id.church_address);
         parson = (TextView) findViewById(R.id.church_parson);
@@ -62,37 +59,15 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
 
 
         intent=getIntent();
-        //position = intent.getStringExtra("id");
         ch = (Church) intent.getParcelableExtra("cerkiew");
-        //image.setImageResource(ch.image);
         name.setText(ch.dedication);
         address.setText(ch.address);
         parson.setText("Proboszcz parafii: "+ch.parson);
         viewPager.setAdapter(new CustomSwipeAdapter(this, ch));
 
-        /*try{
-            if(googleMap == null) {*/
-                MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-                mapFragment.getMapAsync(this);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-                //googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
-            //}
-            //googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            /*LatLng position = new LatLng(ch.latitude, ch.longitude);
-            Marker churchMarker = googleMap.addMarker(new MarkerOptions().position(position).title(ch.dedication));*/
-        /*}
-        catch (Exception e){
-            e.printStackTrace();
-        }*/
-
-        /*System.out.println(ch.dedication);
-        System.out.println(ch.address);
-        System.out.println(ch.parson);
-        System.out.println(ch.services);*/
-       /* System.out.println(ch.short_history);
-        System.out.println(ch.style);
-        System.out.println(ch.wooden);
-*/
         spec = tabhost.newTabSpec("Godziny");
         spec.setContent(R.id.linearLayout2);
         spec.setIndicator("Godziny Nabożeństw");

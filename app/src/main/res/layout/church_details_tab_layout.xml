@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:background="@color/Silver"/>
+        android:background="@color/colorPrimary"/>
 
     <TabHost
         android:id="@+id/tabHost"

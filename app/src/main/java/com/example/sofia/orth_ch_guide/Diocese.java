@@ -28,14 +28,10 @@ public class Diocese extends Fragment {
         Bundle extras = getArguments();
         if(extras!=null)
         {
-            //System.out.println("getting extras");
             churches = extras.getParcelableArrayList("selected");
-            for (int i = 0; i < churches.size(); i++) {
-                System.out.println(churches.get(i).dedication);
-            }
         }
         else {
-            System.out.println("nulllllllll");
+            System.out.println("null");
         }
 
         final Context context = getActivity().getApplicationContext();
