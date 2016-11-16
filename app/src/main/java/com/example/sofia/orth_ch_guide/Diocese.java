@@ -20,19 +20,34 @@ public class Diocese extends Fragment {
     public ArrayList<Church> churches = new ArrayList<>();
     ListView listView;
 
+    public static Diocese newInstance(ArrayList <Church> list){
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("ARGS", list);
+        Diocese fragment = new Diocese();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        churches = getArguments().getParcelableArrayList("ARGS");
+
+    }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.list_of_churches_in_diocese, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
-        Bundle extras = getArguments();
+        /*Bundle extras = getArguments();
         if(extras!=null)
         {
             churches = extras.getParcelableArrayList("selected");
         }
         else {
             System.out.println("null");
-        }
+        }*/
 
         final Context context = getActivity().getApplicationContext();
         listView.setAdapter(new AdapterForListOfChurchesByDiocese(context, R.layout.church_on_list, churches));

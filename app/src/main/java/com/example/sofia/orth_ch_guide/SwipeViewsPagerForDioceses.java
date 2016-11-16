@@ -42,37 +42,49 @@ public class SwipeViewsPagerForDioceses extends FragmentStatePagerAdapter {
         String input = "";
         Bundle extras1;
         Diocese diocese;
+        //System.out.println("Wybrany indeks: "+position);
 
         switch (position) {
             case 0:
                 input = "Wrocławsko-Szczecińska";
-                break;
+                ArrayList<Church>list = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list);
+                //break;
             case 1:
                 input = "Białostocko-Gdańska";
-                break;
+                ArrayList<Church>list1 = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list1);
             case 2:
                 input = "Lubelsko-Chełmska";
-                break;
+                ArrayList<Church>list2 = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list2);
             case 3:
                 input = "Warszawsko-Bielska";
-                break;
+                ArrayList<Church>list3 = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list3);
             case 4:
                 input = "Łódzko-Poznańska";
-                break;
+                ArrayList<Church>list4 = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list4);
             case 5:
                 input = "Przemysko-Gorlicka";
-                break;
+                ArrayList<Church>list5 = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list5);
             case 6:
                 input = "Ordynariat Wojska Polskiego";
-                break;
+                ArrayList<Church>list6 = new Helper().selectByDiocese(input);
+                return Diocese.newInstance(list6);
+            default:
+                return null;
         }
-        selected.clear();
+        /*selected.clear();
+        //System.out.println("Wybrany input: "+input);
         selected = helper.selectByDiocese(input);
         extras1 = new Bundle();
         extras1.putParcelableArrayList("selected", selected);
         diocese = new Diocese();
         diocese.setArguments(extras1);
-        return diocese;
+        return diocese;*/
     }
 
 

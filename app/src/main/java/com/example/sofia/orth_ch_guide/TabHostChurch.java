@@ -3,6 +3,7 @@ package com.example.sofia.orth_ch_guide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,30 +48,37 @@ public class TabHostChurch extends AppCompatActivity implements OnMapReadyCallba
 
         TabHost.TabSpec spec = tabhost.newTabSpec("Dane kontaktowe");
         spec.setContent(R.id.linearLayout);
-        spec.setIndicator("Dane Kontaktowe");
+        spec.setIndicator("Informacje");
         tabhost.addTab(spec);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         name = (TextView) findViewById(R.id.church_name);
         address = (TextView) findViewById(R.id.church_address);
         parson = (TextView) findViewById(R.id.church_parson);
 
-
-
         intent=getIntent();
         ch = (Church) intent.getParcelableExtra("cerkiew");
+        viewPager.setAdapter(new CustomSwipeAdapter(this, ch));
+        viewPager.setOffscreenPageLimit(0);
+        /*viewPager.setCurrentItem(1);
+        viewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(0);
+            }
+        },100);*/
         name.setText(ch.dedication);
         address.setText(ch.address);
         parson.setText("Proboszcz parafii: "+ch.parson);
-        viewPager.setAdapter(new CustomSwipeAdapter(this, ch));
+        //viewPager.setCurrentItem(1);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         spec = tabhost.newTabSpec("Godziny");
         spec.setContent(R.id.linearLayout2);
-        spec.setIndicator("Godziny Nabożeństw");
+        spec.setIndicator("Msze");
         tabhost.addTab(spec);
 
         hours = (TextView)findViewById(R.id.church_hours);

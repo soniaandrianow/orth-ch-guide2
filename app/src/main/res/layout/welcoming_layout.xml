@@ -11,10 +11,21 @@
         android:text="OrthoGuide"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorAccent"/>
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:textSize="40dp" />
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/artwork_by_freevector_com"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

@@ -90,11 +90,13 @@ public class Helper {
         }
         for (int i = 0; i < churches.size(); i++) {
             for (int j = 0; j < count; j++) {
-                if (Math.abs(lati - chosen.get(j).latitude) > Math.abs(lati - churches.get(i).latitude) || Math.abs(longi - chosen.get(j).longitude) > Math.abs(longi - churches.get(i).longitude)) {
-                    chosen.set(j, churches.get(i));
-                    System.out.println(chosen.get(j).dedication);
-                    System.out.println("***" + (Math.abs((lati - chosen.get(j).latitude)) + "//" + Math.abs((longi - chosen.get(j).longitude))));
-                    break;
+                if (Math.abs(lati - chosen.get(j).latitude) > Math.abs(lati - churches.get(i).latitude) && Math.abs(longi - chosen.get(j).longitude) > Math.abs(longi - churches.get(i).longitude)) {
+                    if(!chosen.contains(churches.get(i))) {
+                        chosen.set(j, churches.get(i));
+                        System.out.println(chosen.get(j).dedication);
+                        System.out.println("***" + (Math.abs((lati - chosen.get(j).latitude)) + "//" + Math.abs((longi - chosen.get(j).longitude))));
+                        break;
+                    }
                 }
             }
         }
@@ -126,7 +128,7 @@ public class Helper {
     }
 
     public ArrayList<Church> selectByDiocese(String diocese){
-        System.out.println("Nazwa: "+ diocese);
+        //System.out.println("Przekazana nazwa"+ diocese);
         chosen.clear();
         for (int i = 0; i < churches.size() ; i++) {
             {

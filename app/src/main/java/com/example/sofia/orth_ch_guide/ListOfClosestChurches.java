@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class ListOfClosestChurches extends AppCompatActivity {
 
     LinearLayout layout;
-    private final static int NUMBER_OF_CLOSEST = 2;
+    private final static int NUMBER_OF_CLOSEST = 5;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 0;
     ArrayList<Church> selected = new ArrayList<>(NUMBER_OF_CLOSEST);
     ListView listView;
