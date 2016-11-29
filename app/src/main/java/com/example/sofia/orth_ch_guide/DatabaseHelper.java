@@ -58,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.db = getWritableDatabase();
 
         if (InternetStatus.getInstance(context).isOnline()) {
-            deleteAll();
+            //deleteAll();
             new HttpRequestTask().execute(BASE_URL);
         }
     }
@@ -165,6 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             switch (status) {
                 case 200:
                 case 201:
+                    deleteAll();
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
